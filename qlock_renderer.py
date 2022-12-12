@@ -42,11 +42,11 @@ class QlockRenderer:
         return s.rstrip("\n")
 
     def _generate_number_suffix(self, number):
-        if str(number).endswith("1"):
+        if number == 1:
             return "st"
-        if str(number).endswith("2"):
+        if number == 2:
             return "nd"
-        if str(number).endswith("3"):
+        if number == 3:
             return "rd"
         else:
             return "th"
