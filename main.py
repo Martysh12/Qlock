@@ -2,7 +2,7 @@ import sys
 from datetime import datetime
 
 from PyQt6.QtCore import QPoint, Qt, QTimer
-from PyQt6.QtGui import QAction, QColor, QCursor, QFont, QPainter
+from PyQt6.QtGui import QAction, QColor, QCursor, QFont, QPainter, QPainterPath
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QMenu
 
 from qlock_config_manager import load_config, save_config
@@ -86,13 +86,19 @@ class MainWindow(QMainWindow):
         painter = QPainter(self)
 
         painter.setOpacity(self.config["opacity"])
-        painter.setBrush(QColor(*self.config["background_color"]))
-        painter.drawRect(
+        # painter.setBrush(QColor(*self.config["background_color"]))
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        path = QPainterPath()
+        path.addRoundedRect(
             self.rect().x() - 1,
             self.rect().y() - 1,
             self.rect().width() + 1,
             self.rect().height() + 1,
+            *self.config["radius"]
         )
+
+        painter.fillPath(path, QColor(*self.config["background_color"]))
 
     def mousePressEvent(self, event):
         if not self.locked:

@@ -105,6 +105,29 @@ class QlockSettingsDialog(QDialog):
         self.grid_layout.addWidget(self.size_y_spin_box, 5, 1, 1, 2)
 
         # =====
+        self.radius_label = QLabel("Radius")
+
+        self.radius_x_spin_box = QSpinBox()
+        self.radius_x_spin_box.setMinimum(0)
+        self.radius_x_spin_box.setMaximum(1000000)
+        self.radius_x_spin_box.setValue(self.current_config["radius"][0])
+        self.radius_x_spin_box.valueChanged.connect(
+            self.radius_x_spin_box_value_changed
+        )
+
+        self.radius_y_spin_box = QSpinBox()
+        self.radius_y_spin_box.setMinimum(0)
+        self.radius_y_spin_box.setMaximum(1000000)
+        self.radius_y_spin_box.setValue(self.current_config["radius"][1])
+        self.radius_y_spin_box.valueChanged.connect(
+            self.radius_y_spin_box_value_changed
+        )
+
+        self.grid_layout.addWidget(self.radius_label, 6, 0, 2, 1)
+        self.grid_layout.addWidget(self.radius_x_spin_box, 6, 1, 1, 2)
+        self.grid_layout.addWidget(self.radius_y_spin_box, 7, 1, 1, 2)
+
+        # =====
 
         self.grid_layout_container.setLayout(self.grid_layout)
 
@@ -162,6 +185,12 @@ class QlockSettingsDialog(QDialog):
 
     def size_y_spin_box_value_changed(self, new_value):
         self.current_config["size"][1] = new_value
+
+    def radius_x_spin_box_value_changed(self, new_value):
+        self.current_config["radius"][0] = new_value
+
+    def radius_y_spin_box_value_changed(self, new_value):
+        self.current_config["radius"][1] = new_value
 
     def apply(self):
         save_config(self.current_config)
