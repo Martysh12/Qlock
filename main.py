@@ -3,7 +3,7 @@ from datetime import datetime
 
 from PyQt6.QtCore import QPoint, Qt, QTimer
 from PyQt6.QtGui import QAction, QActionGroup, QColor, QCursor, QFont, QPainter, QPainterPath
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QMenu
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QMenu, QVBoxLayout, QWidget
 
 from qlock_config_manager import load_config, save_config
 from qlock_renderer import QlockRenderer
@@ -27,9 +27,9 @@ class MainWindow(QMainWindow):
 
         self.renderer = QlockRenderer(self.config)
 
-        self.update_label_timer = QTimer()
-        self.update_label_timer.timeout.connect(self.update_label)
-        self.update_label_timer.start()
+        self.update_labels_timer = QTimer()
+        self.update_labels_timer.timeout.connect(self.update_labels)
+        self.update_labels_timer.start()
 
         # allow r/unixporn people to create the most absolutely epically epic things i've ever seen
         self.update_config_timer = QTimer()
@@ -51,8 +51,23 @@ class MainWindow(QMainWindow):
         # self.font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 0)
         # self.font.setBold(True)
 
-        self.label = QLabel("")
-        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.main_widget = QWidget()
+
+        self.labels_column = QVBoxLayout()
+
+        self.hello_label = QLabel("")
+        self.hello_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.labels_column.addWidget(self.hello_label)
+
+        self.main_label = QLabel("")
+        self.main_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.labels_column.addWidget(self.main_label)
+
+        self.date_label = QLabel("")
+        self.date_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.labels_column.addWidget(self.date_label)
+
+        self.main_widget.setLayout(self.labels_column)
 
         self.menu = QMenu()
 
@@ -93,7 +108,7 @@ class MainWindow(QMainWindow):
 
         self.oldPos = self.pos()
 
-        self.setCentralWidget(self.label)
+        self.setCentralWidget(self.main_widget)
 
     def setup_config(self, not_renderer=False):
         self.config = load_config()
@@ -102,19 +117,22 @@ class MainWindow(QMainWindow):
 
         self.font = QFont(self.config["font_face"], self.config["font_size"])
 
-        self.label.setFont(self.font)
-        self.label.setStyleSheet(
-            f"QLabel {{ color: rgb{tuple(self.config['text_color'])}; }}"
-        )
+
+        for i in (self.hello_label, self.main_label, self.date_label):
+            i.setFont(self.font)
+
+            i.setStyleSheet(
+                f"QLabel {{ color: rgb{tuple(self.config['text_color'])}; }}"
+            )
 
         if not not_renderer:
             self.renderer.update_config(self.config)
+            self.repaint()
 
     def paintEvent(self, event=None):
         painter = QPainter(self)
 
         painter.setOpacity(self.config["opacity"])
-        # painter.setBrush(QColor(*self.config["background_color"]))
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         path = QPainterPath()
@@ -144,9 +162,11 @@ class MainWindow(QMainWindow):
     def contextMenuEvent(self, event):
         self.menu.popup(QCursor.pos())
 
-    def update_label(self):
+    def update_labels(self):
         now = datetime.now()
-        self.label.setText(self.renderer.render(now))
+        self.hello_label.setText(self.renderer.render_hello(now))
+        self.main_label.setText(self.renderer.render_clock(now))
+        self.date_label.setText(self.renderer.render_date(now))
 
     def open_settings(self):
         dialog = QlockSettingsDialog()

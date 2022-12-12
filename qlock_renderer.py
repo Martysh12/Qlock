@@ -8,7 +8,7 @@ class QlockRenderer:
     def update_config(self, config):
         self.config = config
 
-    def _get_time_of_day(self, now):
+    def render_hello(self, now):
         user = os.getlogin()
 
         hour_float = now.hour + (now.minute / 60)
@@ -24,7 +24,7 @@ class QlockRenderer:
 
         return f"Good {time_of_day}, {user}"
 
-    def _get_time_string(self, now):
+    def render_clock(self, now):
         chars = []
 
         for i in str(now.hour).zfill(2):
@@ -55,14 +55,5 @@ class QlockRenderer:
         else:
             return "th"
 
-    def _get_date_string(self, now):
+    def render_date(self, now):
         return now.strftime(f"%A, %B {now.day}{self._generate_number_suffix(now.day)}")
-
-    def render(self, now):
-        return (
-            self._get_time_of_day(now)
-            + "\n\n"
-            + self._get_time_string(now)
-            + "\n\n"
-            + self._get_date_string(now)
-        )
