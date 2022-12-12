@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QMenu, QVBoxLayou
 from qlock_config_manager import load_config, save_config
 from qlock_renderer import QlockRenderer
 from qlock_settings_dialog import QlockSettingsDialog
+from qlock_context_menu import QlockContextMenu
 
 
 class MainWindow(QMainWindow):
@@ -69,42 +70,7 @@ class MainWindow(QMainWindow):
 
         self.main_widget.setLayout(self.labels_column)
 
-        self.menu = QMenu()
-
-        settingsAction = self.menu.addAction("Settings")
-        settingsAction.triggered.connect(self.open_settings)
-
-        lockAction = self.menu.addAction("Lock")
-        lockAction.setCheckable(True)
-        lockAction.triggered.connect(self.lock)
-
-        topBottomActionGroup = QActionGroup(self)
-        topBottomActionGroup.setExclusive(True)
-
-        self.menu.addSeparator()
-
-        AOTAction = self.menu.addAction("Always On Top")
-        AOTAction.setCheckable(True)
-        AOTAction.setChecked(self.is_always_on_top)
-        AOTAction.triggered.connect(lambda: self.do_set_flags(0))
-        topBottomActionGroup.addAction(AOTAction)
-
-        LOWAction = self.menu.addAction("Like Other Windows")
-        LOWAction.setCheckable(True)
-        LOWAction.setChecked(self.is_like_other_windows)
-        LOWAction.triggered.connect(lambda: self.do_set_flags(1))
-        topBottomActionGroup.addAction(LOWAction)
-
-        AOBAction = self.menu.addAction("Always On Bottom")
-        AOBAction.setCheckable(True)
-        AOBAction.setChecked(self.is_always_on_bottom)
-        AOBAction.triggered.connect(lambda: self.do_set_flags(2))
-        topBottomActionGroup.addAction(AOBAction)
-
-        self.menu.addSeparator()
-
-        exitAction = self.menu.addAction("Exit")
-        exitAction.triggered.connect(self.close)
+        self.menu = QlockContextMenu(self)
 
         self.oldPos = self.pos()
 
