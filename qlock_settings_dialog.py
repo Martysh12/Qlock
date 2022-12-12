@@ -129,6 +129,11 @@ class QlockSettingsDialog(QDialog):
 
         # =====
 
+        self.digits_info_label = QLabel("<i>To customise digits, you must edit the conf.json file manually.</i>")
+        self.grid_layout.addWidget(self.digits_info_label, 8, 0, 1, 3)
+
+        # =====
+
         self.grid_layout_container.setLayout(self.grid_layout)
 
         self.button_box = QDialogButtonBox(button_box_buttons)

@@ -16,11 +16,11 @@ class MainWindow(QMainWindow):
 
         self.setup_window()
         self.setup_widgets()
-        self.setup_config()
+        self.setup_config(not_renderer=True)
 
         self.locked = False
 
-        self.renderer = QlockRenderer()
+        self.renderer = QlockRenderer(self.config)
 
         self.update_label_timer = QTimer()
         self.update_label_timer.timeout.connect(self.update_label)
@@ -70,7 +70,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.label)
 
-    def setup_config(self):
+    def setup_config(self, not_renderer=False):
         self.config = load_config()
 
         self.setFixedSize(*self.config["size"])
@@ -81,6 +81,9 @@ class MainWindow(QMainWindow):
         self.label.setStyleSheet(
             f"QLabel {{ color: rgb{tuple(self.config['text_color'])}; }}"
         )
+
+        if not not_renderer:
+            self.renderer.update_config(self.config)
 
     def paintEvent(self, event=None):
         painter = QPainter(self)

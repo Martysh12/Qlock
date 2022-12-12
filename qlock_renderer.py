@@ -4,6 +4,12 @@ from qlock_digits import COLON, EMPTY_COLON, NUMS
 
 
 class QlockRenderer:
+    def __init__(self, config):
+        self.update_config(config)
+
+    def update_config(self, config):
+        self.config = config
+
     def _get_time_of_day(self, now):
         user = os.getlogin()
 
@@ -24,12 +30,12 @@ class QlockRenderer:
         chars = []
 
         for i in str(now.hour).zfill(2):
-            chars.append(NUMS[int(i)])
+            chars.append(self.config["digits"][i])
 
-        chars.append(COLON if now.second % 2 == 0 else EMPTY_COLON)
+        chars.append(self.config["digits"]["colon"] if now.second % 2 == 0 else self.config["digits"]["no_colon"])
 
         for i in str(now.minute).zfill(2):
-            chars.append(NUMS[int(i)])
+            chars.append(self.config["digits"][i])
 
         s = ""
 
