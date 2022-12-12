@@ -130,6 +130,7 @@ class QlockSettingsDialog(QDialog):
         # =====
 
         self.digits_info_label = QLabel("<i>To customise digits, you must edit the conf.json file manually.</i>")
+        self.digits_info_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.grid_layout.addWidget(self.digits_info_label, 8, 0, 1, 3)
 
         # =====
