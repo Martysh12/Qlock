@@ -1,7 +1,5 @@
 import os
 
-from qlock_digits import COLON, EMPTY_COLON, NUMS
-
 
 class QlockRenderer:
     def __init__(self, config):
