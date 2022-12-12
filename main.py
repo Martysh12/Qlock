@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
         self.update_label_timer.timeout.connect(self.update_label)
         self.update_label_timer.start()
 
-        # allow r/unixporn people to create the most absolutely fucking epic things i've ever seen
+        # allow r/unixporn people to create the most absolutely epically epic things i've ever seen
         self.update_config_timer = QTimer()
         self.update_config_timer.timeout.connect(self.setup_config)
         self.update_config_timer.setInterval(int(0.5 * 1000))
