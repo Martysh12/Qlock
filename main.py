@@ -134,6 +134,7 @@ class MainWindow(QMainWindow):
     def update_labels(self):
         datetime = QDateTime.currentDateTime()
         date, time = datetime.date(), datetime.time()
+        
         self.hello_label.setText(self.renderer.render_hello(time))
 
         NEWLINE = "\n" # Can't put backslashes in f-strings apparently :shrug:
