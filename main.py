@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
         self.font = QFont(self.config["font_face"], self.config["font_size"])
 
         self.clock_font = QFont(self.config["font_face"], self.config["font_size"])
-        self.clock_font.setBold(True)
+        #self.clock_font.setBold(True)
 
         self.hello_label.setFont(self.font)
         self.main_label.setFont(self.clock_font)
