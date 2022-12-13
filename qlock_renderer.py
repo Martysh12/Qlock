@@ -8,10 +8,10 @@ class QlockRenderer:
     def update_config(self, config):
         self.config = config
 
-    def render_hello(self, now):
+    def render_hello(self, time):
         user = os.getlogin()
 
-        hour_float = now.hour + (now.minute / 60)
+        hour_float = time.hour() + (time.minute() / 60)
 
         if hour_float >= 23 or hour_float < 5:
             time_of_day = "night"
@@ -24,15 +24,15 @@ class QlockRenderer:
 
         return f"Good {time_of_day}, {user}"
 
-    def render_clock(self, now):
+    def render_clock(self, time):
         chars = []
 
-        for i in str(now.hour).zfill(2):
+        for i in str(time.hour()).zfill(2):
             chars.append(self.config["digits"][i])
 
-        chars.append(self.config["digits"]["colon"] if now.second % 2 == 0 else self.config["digits"]["no_colon"])
+        chars.append(self.config["digits"]["colon"] if time.second() % 2 == 0 else self.config["digits"]["no_colon"])
 
-        for i in str(now.minute).zfill(2):
+        for i in str(time.minute()).zfill(2):
             chars.append(self.config["digits"][i])
 
         s = ""
@@ -55,5 +55,5 @@ class QlockRenderer:
         else:
             return "th"
 
-    def render_date(self, now):
-        return now.strftime(f"%A, %B {now.day}{self._generate_number_suffix(now.day)}")
+    def render_date(self, date):
+        return date.toString(f"dddd, MMMM {date.day()}{self._generate_number_suffix(date.day())}")

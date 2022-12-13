@@ -1,7 +1,6 @@
 import sys
-from datetime import datetime
 
-from PyQt6.QtCore import QPoint, Qt, QTimer
+from PyQt6.QtCore import QDateTime, QPoint, Qt, QTimer
 from PyQt6.QtGui import QAction, QActionGroup, QColor, QCursor, QFont, QPainter, QPainterPath
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QMenu, QVBoxLayout, QWidget
 
@@ -83,10 +82,14 @@ class MainWindow(QMainWindow):
 
         self.font = QFont(self.config["font_face"], self.config["font_size"])
 
+        self.clock_font = QFont(self.config["font_face"], self.config["font_size"])
+        self.clock_font.setBold(True)
+
+        self.hello_label.setFont(self.font)
+        self.main_label.setFont(self.clock_font)
+        self.date_label.setFont(self.font)
 
         for i in (self.hello_label, self.main_label, self.date_label):
-            i.setFont(self.font)
-
             i.setStyleSheet(
                 f"QLabel {{ color: rgb{tuple(self.config['text_color'])}; }}"
             )
@@ -129,10 +132,14 @@ class MainWindow(QMainWindow):
         self.menu.popup(QCursor.pos())
 
     def update_labels(self):
-        now = datetime.now()
-        self.hello_label.setText(self.renderer.render_hello(now))
-        self.main_label.setText(self.renderer.render_clock(now))
-        self.date_label.setText(self.renderer.render_date(now))
+        datetime = QDateTime.currentDateTime()
+        date, time = datetime.date(), datetime.time()
+        self.hello_label.setText(self.renderer.render_hello(time))
+
+        NEWLINE = "\n" # Can't put backslashes in f-strings apparently :shrug:
+
+        self.main_label.setText(self.renderer.render_clock(time))
+        self.date_label.setText(self.renderer.render_date(date))
 
     def open_settings(self):
         dialog = QlockSettingsDialog()
