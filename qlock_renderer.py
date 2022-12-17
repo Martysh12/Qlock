@@ -1,5 +1,6 @@
 import os
 
+from PyQt6.QtCore import QLocale
 
 class QlockRenderer:
     def __init__(self, config):
@@ -56,4 +57,4 @@ class QlockRenderer:
             return "th"
 
     def render_date(self, date):
-        return date.toString(f"dddd, MMMM {date.day()}{self._generate_number_suffix(date.day())}")
+        return QLocale().toString(date, f"dddd, MMMM dd{self._generate_number_suffix(date.day())}")
