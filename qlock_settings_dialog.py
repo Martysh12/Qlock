@@ -82,26 +82,6 @@ class QlockSettingsDialog(QDialog):
 
         # =====
 
-        self.line_height_label = QLabel("Line Height")
-
-        self.line_height_slider = QSlider(Qt.Orientation.Horizontal)
-        self.line_height_slider.setMinimum(0)
-        self.line_height_slider.setMaximum(200)
-        self.line_height_slider.setValue(self.current_config["clock_line_height"])
-        self.line_height_slider.valueChanged.connect(self.line_height_slider_value_changed)
-
-        self.line_height_slider_spin_box = QSpinBox()
-        self.line_height_slider_spin_box.setMinimum(0)
-        self.line_height_slider_spin_box.setMaximum(200)
-        self.line_height_slider_spin_box.setValue(self.current_config["clock_line_height"])
-        self.line_height_slider_spin_box.valueChanged.connect(self.line_height_slider_spin_box_value_changed)
-
-        self.grid_layout.addWidget(self.line_height_label, 4, 0)
-        self.grid_layout.addWidget(self.line_height_slider, 4, 1)
-        self.grid_layout.addWidget(self.line_height_slider_spin_box, 4, 2)
-
-        # =====
-
         self.size_label = QLabel("Size")
 
         self.size_x_spin_box = QSpinBox()
@@ -205,16 +185,6 @@ class QlockSettingsDialog(QDialog):
         if ok:
             self.current_config["font_face"] = font.family()
             self.current_config["font_size"] = font.pointSize()
-
-    def line_height_slider_value_changed(self, new_value):
-        self.current_config["clock_line_height"] = new_value
-
-        self.line_height_slider_spin_box.setValue(new_value)
-
-    def line_height_slider_spin_box_value_changed(self, new_value):
-        self.current_config["clock_line_height"] = new_value
-
-        self.line_height_slider.setValue(new_value)
 
     def size_x_spin_box_value_changed(self, new_value):
         self.current_config["size"][0] = new_value

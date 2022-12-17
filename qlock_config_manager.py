@@ -9,7 +9,6 @@ def generate_default_config():
                 "opacity": 0.67,
                 "font_face": "Noto Sans",
                 "font_size": 14,
-                "clock_line_height": 100,
                 "size": [539, 364],
                 "radius": [50, 50],
                 "digits": {
